@@ -87,6 +87,10 @@ class App
     @tasks = json_data.map do |task|
       task.transform_keys(&:to_sym)
     end
+  rescue Errno::ENOENT
+    File.open(file_path,'w+')
+    File.write(file_path, [])
+    retry
   end
 
   def display_add_task
