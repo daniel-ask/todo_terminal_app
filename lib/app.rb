@@ -13,6 +13,14 @@ class App
     @tasks[index][:task] = edited_task
   end
 
+  def delete_task(index)
+    @tasks.delete_at(index)
+  end
+
+  def toggle_complete(index)
+    @tasks[index][:completed] = !@tasks[index][:completed]
+  end
+
   def display_add_task
     puts 'Enter name of task'
   end

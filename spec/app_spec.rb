@@ -42,6 +42,39 @@ RSpec.describe App do
     end
   end
 
+  describe '#delete_task' do
+    before(:each) do
+      app.tasks = [{ task: 'test task', completed: false }]
+    end
+
+    it 'should remove a task at index 0' do
+      app.delete_task(0)
+      expect(app.tasks).to be_empty
+    end
+
+    it 'should delete the correct task' do
+      deleted_task = { task: 'task to be deleted', completed: false }
+      app.tasks << deleted_task
+      app.tasks << { task: 'last task', completed: false }
+      app.delete_task(1)
+      expect(app.tasks).not_to include(deleted_task)
+    end
+  end
+
+  describe '#toggle_complete' do
+    it 'should toggle a false task to true' do
+      app.tasks << { task: 'toggle task', completed: false }
+      app.toggle_complete(0)
+      expect(app.tasks[0][:completed]).to be true
+    end
+
+    it 'should toggle a true task to false' do
+      app.tasks << { task: 'toggle task', completed: true }
+      app.toggle_complete(0)
+      expect(app.tasks[0][:completed]).to be false
+    end
+  end
+
   describe 'display methods' do
     context '#display_add_task' do
       it 'should ask user for input' do
@@ -89,16 +122,19 @@ RSpec.describe App do
   end
 
   describe 'input methods' do
-    let(:input) { StringIO.new('test task') }
-    it 'should be able to receive task name from terminal' do
-      $stdin = input
-      expect(app.task_add).to eq('test task')
+    context '#task_add' do
+      let(:input) { StringIO.new('test task') }
+      it 'should be able to receive task name from terminal' do
+        $stdin = input
+        expect(app.task_add).to eq('test task')
+      end
     end
-
-    let(:input) { StringIO.new('1') }
-    it 'should return the index of task selected' do
-      $stdin = input
-      expect(app.select_task).to eq(0)
+    context '#select_task' do
+      let(:input) { StringIO.new('1') }
+      it 'should return the index of task selected' do
+        $stdin = input
+        expect(app.select_task).to eq(0)
+      end
     end
   end
 end
