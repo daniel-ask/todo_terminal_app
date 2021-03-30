@@ -1,8 +1,12 @@
+# frozen_string_literal: true
+
+require 'json'
 class App
   attr_accessor :tasks
 
   def initialize
     @tasks = []
+    load_data('./data/todo.json')
   end
 
   def run
@@ -28,9 +32,9 @@ class App
     when 3
       delete_task_action
     when 4
-      # toggle a task complete
       toggle_task_action
     when 5
+      File.write('./data/todo.json', @tasks.to_json)
       exit
     end
   end
@@ -50,7 +54,7 @@ class App
     index = select_task_action
     toggle_complete(index)
   end
-  
+
   def select_task_action
     display_select_task
     index = select_task
@@ -76,6 +80,13 @@ class App
 
   def toggle_complete(index)
     @tasks[index][:completed] = !@tasks[index][:completed]
+  end
+
+  def load_data(file_path)
+    json_data = JSON.parse(File.read(file_path))
+    @tasks = json_data.map do |task|
+      task.transform_keys(&:to_sym)
+    end
   end
 
   def display_add_task

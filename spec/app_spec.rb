@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require_relative '../lib/app'
 
 # Clearing ARGV to make rspec -f d to work
