@@ -2,5 +2,5 @@
 
 require_relative 'lib/app'
 
-todo = App.new
+todo = App.new('./data/todo.json')
 todo.run

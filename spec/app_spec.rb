@@ -7,16 +7,12 @@ ARGV.clear
 
 RSpec.describe App do
   subject(:app) do
-    described_class.new
+    described_class.new('./data/testing.json')
   end
 
   describe 'Class testing' do
     it 'should be an instance of App' do
       expect(app).to be_a App
-    end
-
-    it 'should have an empty task list' do
-      expect(app.tasks).to eq []
     end
   end
 

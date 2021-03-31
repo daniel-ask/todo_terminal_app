@@ -1,24 +1,36 @@
 # frozen_string_literal: true
 
 require 'json'
+require 'tty-prompt'
+require 'artii'
 class App
   attr_accessor :tasks
 
-  def initialize
-    @tasks = []
-    load_data('./data/todo.json')
+  def initialize(file_path)
+    @prompt = TTY::Prompt.new
+    @file_path = file_path
+    load_data(file_path)
   end
 
   def run
     loop do
       system 'clear'
-      display_welcome
+      a = Artii::Base.new
+      puts a.asciify('Todo!')
       puts '-' * 20
       display_tasks
       puts '-' * 20
-      display_menu
+      # display_menu
+      # process_menu(menu_input)
+      input = @prompt.select("Menu:") do |menu|
+        menu.choice "Add Task", 1
+        menu.choice "Complete Task", 2
+        menu.choice 'Edit Task', 3
+        menu.choice 'Delete Task', 4
+        menu.choice 'Exit', 5
+      end
       puts '-' * 20
-      process_menu(menu_input)
+      process_menu(input)
     end
   end
 
@@ -28,13 +40,13 @@ class App
       display_new_task
       add_task(task_add)
     when 2
-      edit_task
-    when 3
-      delete_task_action
-    when 4
       toggle_task_action
+    when 3
+      edit_task
+    when 4
+      delete_task_action
     when 5
-      File.write('./data/todo.json', @tasks.to_json)
+      File.write(@file_path, @tasks.to_json)
       exit
     end
   end
