@@ -31,9 +31,9 @@ class App
       puts '-' * 20
       # display_menu
       # process_menu(menu_input)
-      input = @prompt.select("Menu:") do |menu|
-        menu.choice "Add Task", 1
-        menu.choice "Complete Task", 2
+      input = @prompt.select('Menu:') do |menu|
+        menu.choice 'Add Task', 1
+        menu.choice 'Complete Task', 2
         menu.choice 'Edit Task', 3
         menu.choice 'Delete Task', 4
         menu.choice 'Exit', 5
@@ -58,7 +58,7 @@ class App
       puts "#{@tasks[index][:task]} has been switched"
     when 'edit', 'e'
       index, *new_task = other
-      change_task(new_task.join(' '),index.to_i - 1)
+      change_task(new_task.join(' '), index.to_i - 1)
       puts 'Changed task'
     when 'delete', 'd'
       index = other[0].to_i - 1
@@ -136,7 +136,7 @@ class App
       task.transform_keys(&:to_sym)
     end
   rescue Errno::ENOENT
-    File.open(file_path,'w+')
+    File.open(file_path, 'w+')
     File.write(file_path, [])
     retry
   end
@@ -158,15 +158,6 @@ class App
 
   def display_select_task
     puts 'Please enter the number of the task:'
-  end
-
-  def display_menu
-    puts 'Menu:'
-    puts '1. Add task'
-    puts '2. Edit task'
-    puts '3. Delete task'
-    puts '4. Toggle completed'
-    puts '5. Exit'
   end
 
   def display_welcome
