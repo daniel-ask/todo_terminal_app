@@ -13,6 +13,14 @@ class App
   end
 
   def run
+    if ARGV.empty?
+      run_normal
+    else
+      run_with_argv
+    end
+  end
+
+  def run_normal
     loop do
       system 'clear'
       a = Artii::Base.new
@@ -32,6 +40,22 @@ class App
       puts '-' * 20
       process_menu(input)
     end
+  end
+
+  def run_with_argv
+    first, *other = ARGV
+    case first
+    when 'list'
+      display_tasks
+    when 'add'
+      add_task(other.join(' '))
+      puts "#{other.join(' ')} has been added"
+    when 'complete', 'c'
+      index = other[0].to_i - 1
+      toggle_complete(index)
+      puts "#{@tasks[0][:task]} has been switched"
+    end
+    File.write(@file_path, @tasks.to_json)
   end
 
   def process_menu(menu_choice)
