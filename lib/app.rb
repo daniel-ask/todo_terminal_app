@@ -7,6 +7,7 @@ class App
   attr_accessor :tasks
 
   def initialize(file_path)
+    # absolute_path = '/Users/dask/CoderAcademy/todo-app'
     @prompt = TTY::Prompt.new
     @file_path = file_path
     load_data(file_path)
@@ -44,6 +45,7 @@ class App
 
   def run_with_argv
     first, *other = ARGV
+    ARGV.clear
     case first
     when 'list'
       display_tasks
@@ -53,7 +55,17 @@ class App
     when 'complete', 'c'
       index = other[0].to_i - 1
       toggle_complete(index)
-      puts "#{@tasks[0][:task]} has been switched"
+      puts "#{@tasks[index][:task]} has been switched"
+    when 'edit', 'e'
+      index, *new_task = other
+      change_task(new_task.join(' '),index.to_i - 1)
+      puts 'Changed task'
+    when 'delete', 'd'
+      index = other[0].to_i - 1
+      puts "#{@tasks[index][:task]} has been deleted"
+      delete_task(index)
+    else
+      puts 'INVALID COMMAND LINE ARGUMENT'
     end
     File.write(@file_path, @tasks.to_json)
   end
